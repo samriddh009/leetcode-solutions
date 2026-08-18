@@ -22,23 +22,19 @@
         # return ans
 
 #take not take
-def fun(i,nums,op,cur_sum,target,ans,d):
+def fun(i,nums,op,cur_sum,target,ans):
     if cur_sum == target:
-        k = tuple(sorted(op))
-        if k not in d:
-            d[k]=1
-            ans.append(op.copy())
+        ans.append(op.copy())
         return 
     if cur_sum>target or i>=len(nums):
         return
     op.append(nums[i])
-    fun(i, nums, op, cur_sum + nums[i], target, ans, d)
+    fun(i, nums, op, cur_sum + nums[i], target, ans)
     op.pop()
-    fun(i+1, nums, op, cur_sum, target, ans, d)
+    fun(i+1, nums, op, cur_sum, target, ans)
 
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         ans = []
-        d = {}
-        fun(0,candidates,[],0,target,ans,d)
+        fun(0,candidates,[],0,target,ans)
         return ans
