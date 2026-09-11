@@ -1,22 +1,21 @@
+from functools import cache
+from typing import List
+
 class Solution:
     def validPartition(self, nums: List[int]) -> bool:
         n = len(nums)
-        @cache
-        def fun(i):
-            if i == n - 1:
-                return True
-            l = i + 2
-            if l < n:
-                if nums[l] == nums[l - 1]:
-                    if fun(l):
-                        return True
-            l = i + 3
-            if l < n:
-                if nums[l] == nums[l - 1] and nums[l] == nums[l - 2]:
-                    if fun(l):
-                        return True
-                if nums[l] == nums[l - 1] + 1 and nums[l - 1] == nums[l - 2] + 1:
-                    if fun(l):
-                        return True
-            return False
-        return fun(-1)
+        dp = [False] * (n + 1)
+        dp[0] = True 
+        def fun(i: int):
+            if i >= n:
+                return
+            if i >= 1 and nums[i] == nums[i - 1] and dp[i - 1]:
+                dp[i + 1] = True
+            if i >= 2:
+                if nums[i] == nums[i - 1] == nums[i - 2] and dp[i - 2]:
+                    dp[i + 1] = True
+                if nums[i] == nums[i - 1] + 1 == nums[i - 2] + 2 and dp[i - 2]:
+                    dp[i + 1] = True
+            fun(i + 1)
+        fun(0)
+        return dp[n]
